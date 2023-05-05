@@ -1,0 +1,11 @@
+ios
+android
+node_modules
+.bundle
+__tests__
+Gemfile
+babel.config.js
+metro.config.js
+package.json
+tsconfig.json
+yarn.lock

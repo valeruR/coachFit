@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>865310048518-g992ml2n0kgpertra7f9upfs3t7u84nh.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.865310048518-g992ml2n0kgpertra7f9upfs3t7u84nh</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBRd6YE9GFf7gs3Ml5ueMMItfB8jMisZb8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>865310048518</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.coachfit</string>
+	<key>PROJECT_ID</key>
+	<string>coach-fit-f4a01</string>
+	<key>STORAGE_BUCKET</key>
+	<string>coach-fit-f4a01.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:865310048518:ios:82c31a3130b9dac868de87</string>
+</dict>
+</plist>
