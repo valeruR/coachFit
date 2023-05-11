@@ -1,4 +1,9 @@
-import React, { useCallback, useLayoutEffect } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
 import {
   View,
   Text,
@@ -8,12 +13,16 @@ import {
   ScrollView,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HorizontalList from '../../components/ListComponents/HorizontalList/HorizontalList';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DiscoveryNavigatorParamsList } from '../../../../navigation/types';
-import { layout, swiperLayout } from './listLayout';
+import { layout } from './listLayout';
 
 const HeaderButton = ({ title }: { title: string }) => {
   return (
@@ -37,11 +46,51 @@ type HomePageProps = {
   >;
 };
 
+type ProgramProps = {
+  key: string;
+  media: string;
+  name: string;
+  coachName: string;
+  featured: boolean;
+};
+
+const fromSnapShotsToProgram = async (
+  docs: FirebaseFirestoreTypes.QueryDocumentSnapshot[],
+) => {
+  const ret: ProgramProps[] = [];
+  for (const doc of docs) {
+    const { coachName, name, featured } = doc.data();
+    const img = await (
+      await storage().ref(`programs/${doc.id}`).list()
+    ).items[0].getDownloadURL();
+    ret.push({
+      key: doc.id,
+      coachName,
+      name,
+      featured,
+      media: img,
+    });
+  }
+  return ret;
+};
+
 export default function HomePage({ navigation }: HomePageProps) {
+  const [programs, setPrograms] = useState<Array<ProgramProps>>([]);
   const renderHeaderButton = useCallback(
     (title: string) => <HeaderButton title={title} />,
     [],
   );
+
+  useEffect(() => {
+    async function getData() {
+      const test = await firestore().collection('programs').get();
+      if (test?.docs?.length) {
+        const convert = await fromSnapShotsToProgram(test.docs);
+        setPrograms(convert);
+      }
+    }
+    getData();
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -68,16 +117,18 @@ export default function HomePage({ navigation }: HomePageProps) {
               dotColor="gray"
               activeDotColor="lightgray"
             >
-              {swiperLayout &&
-                swiperLayout.map((item) => (
-                  <View key={item.key}>
-                    <Image
-                      source={item.img}
-                      resizeMode="cover"
-                      style={styles.img}
-                    />
-                  </View>
-                ))}
+              {programs &&
+                programs
+                  .filter((elm) => elm.featured)
+                  .map((item) => (
+                    <View key={item.key}>
+                      <Image
+                        source={{ uri: item.media }}
+                        resizeMode="cover"
+                        style={styles.img}
+                      />
+                    </View>
+                  ))}
             </Swiper>
           </View>
         </View>
@@ -136,6 +187,10 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     borderRadius: 10,
+  },
+  testImg: {
+    height: '50%',
+    width: '100%',
   },
   text: {
     color: 'gray',
