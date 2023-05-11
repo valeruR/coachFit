@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Image, FlatList, StyleSheet } from 'react-native';
+import { CardItemType } from '../types';
 
-const Card = ({ item }) => {
+const Card = ({ item }: { item: CardItemType }) => {
   return (
     <View style={styles.cardContainer}>
       <Image source={item.img} resizeMode="cover" style={styles.cardImg} />
@@ -9,9 +10,9 @@ const Card = ({ item }) => {
   );
 };
 
-const extractor = (_item, idx) => idx;
+const extractor = (_item: CardItemType, idx: number) => idx.toString();
 
-const LongList = ({ data }) => {
+const LongList = ({ data }: { data: Array<CardItemType> }) => {
   return (
     <View>
       <FlatList
@@ -35,8 +36,7 @@ const styles = StyleSheet.create({
   cardImg: {
     width: '100%',
     height: '100%',
-    borderTopRightRadius: 10,
-    borderTopLeftRadius: 10,
+    borderRadius: 10,
   },
 });
 
