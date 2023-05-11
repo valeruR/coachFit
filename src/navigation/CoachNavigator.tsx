@@ -6,8 +6,9 @@ import {
   Collections,
   Insights,
 } from '../modules/coaching/screens/CoachPage/sections';
+import { TopTabNavigatorParamsList } from './types';
 
-const Tab = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator<TopTabNavigatorParamsList>();
 
 const CoachNavigator = () => {
   return (

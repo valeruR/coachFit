@@ -28,3 +28,9 @@ export type NavigatorParamList = {
   AppStack: undefined;
   Login: undefined;
 };
+
+export type TopTabNavigatorParamsList = {
+  About: undefined;
+  Collections: undefined;
+  Insight: undefined;
+};
