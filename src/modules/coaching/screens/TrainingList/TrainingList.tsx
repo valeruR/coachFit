@@ -22,7 +22,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import HorizontalList from '../../components/ListComponents/HorizontalList/HorizontalList';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DiscoveryNavigatorParamsList } from '../../../../navigation/types';
-import { layout } from './listLayout';
+import { CardType } from '../../components/ListComponents/types';
 
 const HeaderButton = ({ title }: { title: string }) => {
   return (
@@ -50,6 +50,7 @@ type ProgramProps = {
   key: string;
   media: string;
   name: string;
+  tag: string;
   coachName: string;
   featured: boolean;
 };
@@ -59,7 +60,7 @@ const fromSnapShotsToProgram = async (
 ) => {
   const ret: ProgramProps[] = [];
   for (const doc of docs) {
-    const { coachName, name, featured } = doc.data();
+    const { coachName, name, featured, tag } = doc.data();
     const img = await (
       await storage().ref(`programs/${doc.id}`).list()
     ).items[0].getDownloadURL();
@@ -67,6 +68,7 @@ const fromSnapShotsToProgram = async (
       key: doc.id,
       coachName,
       name,
+      tag,
       featured,
       media: img,
     });
@@ -76,6 +78,9 @@ const fromSnapShotsToProgram = async (
 
 export default function HomePage({ navigation }: HomePageProps) {
   const [programs, setPrograms] = useState<Array<ProgramProps>>([]);
+  const [categories, setCategories] = useState<
+    { name: string; cardType: CardType }[]
+  >([]);
   const renderHeaderButton = useCallback(
     (title: string) => <HeaderButton title={title} />,
     [],
@@ -83,9 +88,19 @@ export default function HomePage({ navigation }: HomePageProps) {
 
   useEffect(() => {
     async function getData() {
-      const test = await firestore().collection('programs').get();
-      if (test?.docs?.length) {
-        const convert = await fromSnapShotsToProgram(test.docs);
+      const programCollection = await firestore().collection('programs').get();
+      const categoriesCollection = await firestore()
+        .collection('program_categories')
+        .get();
+      if (categoriesCollection?.docs?.length) {
+        const categoryDocs = categoriesCollection.docs.map((cat) => ({
+          name: cat.data().name,
+          cardType: cat.data().cardType,
+        }));
+        setCategories(categoryDocs);
+      }
+      if (programCollection?.docs?.length) {
+        const convert = await fromSnapShotsToProgram(programCollection.docs);
         setPrograms(convert);
       }
     }
@@ -111,14 +126,14 @@ export default function HomePage({ navigation }: HomePageProps) {
             </TouchableOpacity>
           </View>
           <View style={styles.swiper}>
-            <Swiper
-              containerStyle={styles.wrapper}
-              showsButtons={false}
-              dotColor="gray"
-              activeDotColor="lightgray"
-            >
-              {programs &&
-                programs
+            {programs && (
+              <Swiper
+                containerStyle={styles.wrapper}
+                showsButtons={false}
+                dotColor="gray"
+                activeDotColor="lightgray"
+              >
+                {programs
                   .filter((elm) => elm.featured)
                   .map((item) => (
                     <View key={item.key}>
@@ -129,16 +144,24 @@ export default function HomePage({ navigation }: HomePageProps) {
                       />
                     </View>
                   ))}
-            </Swiper>
+              </Swiper>
+            )}
           </View>
         </View>
-        {layout &&
-          layout.map((item) => (
+        {categories &&
+          programs &&
+          categories.map((category) => (
             <HorizontalList
-              key={item.category}
-              cardType={item.type}
-              category={item.category}
-              data={item.data}
+              key={category.name}
+              cardType={category.cardType}
+              category={category.name}
+              data={programs
+                .filter((elm) => elm.tag === category.name)
+                .map((prog) => ({
+                  img: prog.media,
+                  coach: prog.coachName,
+                  title: prog.name,
+                }))}
               navigation={navigation}
             />
           ))}

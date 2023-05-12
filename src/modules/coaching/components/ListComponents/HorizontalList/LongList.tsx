@@ -5,7 +5,11 @@ import { CardItemType } from '../types';
 const Card = ({ item }: { item: CardItemType }) => {
   return (
     <View style={styles.cardContainer}>
-      <Image source={item.img} resizeMode="cover" style={styles.cardImg} />
+      <Image
+        source={{ uri: item.img }}
+        resizeMode="cover"
+        style={styles.cardImg}
+      />
     </View>
   );
 };

@@ -6,7 +6,11 @@ const Card = ({ item }: { item: CardItemType }) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.imgContainer}>
-        <Image source={item.img} resizeMode="cover" style={styles.cardImg} />
+        <Image
+          source={{ uri: item.img }}
+          resizeMode="cover"
+          style={styles.cardImg}
+        />
       </View>
       <View style={styles.cardSection}>
         <Text style={styles.cardTitle}>{item.title}</Text>

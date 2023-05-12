@@ -1,9 +1,8 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ImageSourcePropType } from 'react-native';
 import { DiscoveryNavigatorParamsList } from '../../../../navigation/types';
 
 export type CardItemType = {
-  img: ImageSourcePropType;
+  img: string;
   title: string;
   coach: string;
 };
