@@ -6,7 +6,11 @@ const Card = ({ item }: { item: CardItemType }) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.imgContainer}>
-        <Image source={item.img} resizeMode="cover" style={styles.cardImg} />
+        <Image
+          source={{ uri: item.img }}
+          resizeMode="cover"
+          style={styles.cardImg}
+        />
       </View>
       <View style={styles.cardSection}>
         <Text style={styles.cardTitle}>{item.title}</Text>
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
     width: '50%',
     borderRadius: 10,
     marginHorizontal: 5,
-    marginBottom: 5,
+    marginBottom: 35,
     flexDirection: 'column',
   },
   imgContainer: {

@@ -5,6 +5,7 @@ export type CardItemType = {
   img: string;
   title: string;
   coach: string;
+  key?: string;
 };
 
 export type CardType = 'card' | 'longCard';

@@ -1,19 +1,24 @@
 import React from 'react';
 import { View, Image, FlatList, StyleSheet } from 'react-native';
+import { CardItemType } from '../types';
 
-const Card = ({ item }) => {
+const Card = ({ item }: { item: CardItemType }) => {
   return (
     <View style={styles.cardContainer}>
-      <Image source={item.img} resizeMode="cover" style={styles.cardImg} />
+      <Image
+        source={{ uri: item.img }}
+        resizeMode="cover"
+        style={styles.cardImg}
+      />
     </View>
   );
 };
 
-const extractor = (_item, idx) => idx;
+const extractor = (_item: CardItemType, idx: number) => `${_item.title}_${idx}`;
 
-const LongList = ({ data }) => {
-  return <FlatList data={data} renderItem={Card} keyExtractor={extractor} />;
-};
+const LongList = ({ data }: { data: CardItemType[] }) => (
+  <FlatList data={data} renderItem={Card} keyExtractor={extractor} />
+);
 
 const styles = StyleSheet.create({
   cardContainer: {
