@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppNavigator from './AppNavigator';
@@ -12,10 +12,6 @@ const Stack = createNativeStackNavigator<NavigatorParamList>();
 
 export default function Navigation() {
   const context = useContext(Context);
-
-  useEffect(() => {
-    console.debug('context:', context);
-  }, [context]);
 
   return (
     <NavigationContainer>

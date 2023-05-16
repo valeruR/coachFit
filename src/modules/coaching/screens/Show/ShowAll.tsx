@@ -30,7 +30,7 @@ type ShowAllProps = {
 const ShowAll = ({ route, navigation }: ShowAllProps) => {
   const [loading, setLoading] = useState(true);
   const [programs, setPrograms] = useState<CardItemType[]>([]);
-  const { type, category } = route.params;
+  const { type, category } = route?.params;
 
   useEffect(() => {
     setLoading(true);

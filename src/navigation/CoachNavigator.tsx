@@ -6,17 +6,32 @@ import {
   Collections,
   Insights,
 } from '../modules/coaching/screens/CoachPage/sections';
-import { TopTabNavigatorParamsList } from './types';
+import { CoachNavigatorParamsList, TopTabNavigatorParamsList } from './types';
+import Header from '../modules/coaching/screens/CoachPage/CoachPage';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Tab = createMaterialTopTabNavigator<TopTabNavigatorParamsList>();
+const Stack = createNativeStackNavigator<CoachNavigatorParamsList>();
+
+const TabNavigator = () => (
+  <Tab.Navigator>
+    <Tab.Screen name="About" component={About} />
+    <Tab.Screen name="Collections" component={Collections} />
+    <Tab.Screen name="Insight" component={Insights} />
+  </Tab.Navigator>
+);
 
 const CoachNavigator = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="About" component={About} />
-      <Tab.Screen name="Collections" component={Collections} />
-      <Tab.Screen name="Insight" component={Insights} />
-    </Tab.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="TabScreen"
+        component={TabNavigator}
+        options={({ navigation }) => ({
+          header: () => <Header navigation={navigation} />,
+        })}
+      />
+    </Stack.Navigator>
   );
 };
 
