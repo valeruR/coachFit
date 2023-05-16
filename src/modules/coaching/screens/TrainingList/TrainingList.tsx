@@ -11,18 +11,20 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  Pressable,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-
+import { useDispatch } from 'react-redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HorizontalList from '../../components/ListComponents/HorizontalList/HorizontalList';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DiscoveryNavigatorParamsList } from '../../../../navigation/types';
 import { CardType } from '../../components/ListComponents/types';
+import { addId } from '../../../../redux/coachReducer';
 
 const HeaderButton = ({ title }: { title: string }) => {
   return (
@@ -51,7 +53,8 @@ type ProgramProps = {
   media: string;
   name: string;
   tag: string;
-  coachName: string;
+  coach: FirebaseFirestoreTypes.DocumentData | null;
+  coachId: string;
   featured: boolean;
 };
 
@@ -60,13 +63,16 @@ const fromSnapShotsToProgram = async (
 ) => {
   const ret: ProgramProps[] = [];
   for (const doc of docs) {
-    const { coachName, name, featured, tag } = doc.data();
+    const { name, featured, tag, coach } = doc.data();
+    const tCoach = await firestore().collection('coaches').doc(coach).get();
+    const tCoachData = tCoach.data();
     const img = await (
       await storage().ref(`programs/${doc.id}`).list()
     ).items[0].getDownloadURL();
     ret.push({
       key: doc.id,
-      coachName,
+      coach: { ...tCoachData },
+      coachId: tCoach.id,
       name,
       tag,
       featured,
@@ -81,9 +87,22 @@ export default function HomePage({ navigation }: HomePageProps) {
   const [categories, setCategories] = useState<
     { name: string; cardType: CardType }[]
   >([]);
+
+  const dispatch = useDispatch();
+
   const renderHeaderButton = useCallback(
     (title: string) => <HeaderButton title={title} />,
     [],
+  );
+
+  const onPress = useCallback(
+    (id: string) => {
+      dispatch(addId(id));
+      navigation.navigate('CoachPage', {
+        id,
+      });
+    },
+    [navigation, dispatch],
   );
 
   useEffect(() => {
@@ -136,13 +155,16 @@ export default function HomePage({ navigation }: HomePageProps) {
                 {programs
                   .filter((elm) => elm.featured)
                   .map((item) => (
-                    <View key={item.key}>
+                    <Pressable
+                      key={item.key}
+                      onPress={() => onPress(item.coachId)}
+                    >
                       <Image
                         source={{ uri: item.media }}
                         resizeMode="cover"
                         style={styles.img}
                       />
-                    </View>
+                    </Pressable>
                   ))}
               </Swiper>
             )}
@@ -159,7 +181,7 @@ export default function HomePage({ navigation }: HomePageProps) {
                 .filter((elm) => elm.tag === category.name)
                 .map((prog) => ({
                   img: prog.media,
-                  coach: prog.coachName,
+                  coach: `${prog?.coach?.firstname} ${prog?.coach?.lastname}`,
                   title: prog.name,
                 }))}
               navigation={navigation}

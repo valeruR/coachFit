@@ -7,16 +7,27 @@ import {
   Image,
   SafeAreaView,
 } from 'react-native';
+import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconFeather from 'react-native-vector-icons/Feather';
 import { profilPicture } from '../../../../assets';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { CoachNavigatorParamsList } from '../../../../navigation/types';
+import { RootState } from '../../../../redux';
 
-const Header = () => {
+type HeaderProps = {
+  navigation: NativeStackNavigationProp<CoachNavigatorParamsList, 'TabScreen'>;
+};
+
+const Header = ({ navigation }: HeaderProps) => {
+  const coachId = useSelector((state: RootState) => state.coach.id);
+  console.log('COACH ID:', coachId);
   return (
     <SafeAreaView style={styles.header}>
       <View style={styles.tab}>
         <Icon
-          /* onPress={navigation.goBack()} */ color="gray"
+          onPress={() => navigation.goBack()}
+          color="gray"
           name="arrowleft"
           size={20}
           style={styles.leftIcon}
