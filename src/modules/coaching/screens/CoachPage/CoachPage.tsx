@@ -10,7 +10,6 @@ import {
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconFeather from 'react-native-vector-icons/Feather';
-import { profilPicture } from '../../../../assets';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { CoachNavigatorParamsList } from '../../../../navigation/types';
 import { RootState } from '../../../../redux';
@@ -20,8 +19,7 @@ type HeaderProps = {
 };
 
 const Header = ({ navigation }: HeaderProps) => {
-  const coachId = useSelector((state: RootState) => state.coach.id);
-  console.log('COACH ID:', coachId);
+  const coach = useSelector((state: RootState) => state.coach);
   return (
     <SafeAreaView style={styles.header}>
       <View style={styles.tab}>
@@ -32,7 +30,9 @@ const Header = ({ navigation }: HeaderProps) => {
           size={20}
           style={styles.leftIcon}
         />
-        <Text style={styles.title}>Reever Valerus</Text>
+        <Text style={styles.title}>
+          {coach.firstname} {coach.lastname}
+        </Text>
         <Icon name="staro" color="gray" size={20} style={styles.rightIcon} />
       </View>
       <View style={styles.headerSection}>
@@ -43,7 +43,7 @@ const Header = ({ navigation }: HeaderProps) => {
           <Text style={styles.headerText}>Message</Text>
         </TouchableOpacity>
         <Image
-          source={profilPicture}
+          source={{ uri: coach.img }}
           style={styles.profilPicture}
           resizeMode="cover"
           resizeMethod="scale"

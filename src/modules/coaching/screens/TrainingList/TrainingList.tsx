@@ -12,19 +12,20 @@ import {
   TouchableOpacity,
   ScrollView,
   Pressable,
+  Alert,
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import firestore, {
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../../../redux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import HorizontalList from '../../components/ListComponents/HorizontalList/HorizontalList';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DiscoveryNavigatorParamsList } from '../../../../navigation/types';
 import { CardType } from '../../components/ListComponents/types';
-import { addId } from '../../../../redux/coachReducer';
+import { getCoach } from '../../../../redux/coachReducer';
 
 const HeaderButton = ({ title }: { title: string }) => {
   return (
@@ -88,7 +89,7 @@ export default function HomePage({ navigation }: HomePageProps) {
     { name: string; cardType: CardType }[]
   >([]);
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const renderHeaderButton = useCallback(
     (title: string) => <HeaderButton title={title} />,
@@ -97,10 +98,13 @@ export default function HomePage({ navigation }: HomePageProps) {
 
   const onPress = useCallback(
     (id: string) => {
-      dispatch(addId(id));
-      navigation.navigate('CoachPage', {
-        id,
-      });
+      dispatch(getCoach(id))
+        .then(() =>
+          navigation.navigate('CoachPage', {
+            id,
+          }),
+        )
+        .catch(() => Alert.alert('An error occured'));
     },
     [navigation, dispatch],
   );
@@ -123,7 +127,7 @@ export default function HomePage({ navigation }: HomePageProps) {
         setPrograms(convert);
       }
     }
-    getData();
+    getData().catch(() => Alert.alert('No programs found'));
   }, []);
 
   useLayoutEffect(() => {
