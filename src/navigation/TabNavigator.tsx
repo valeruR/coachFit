@@ -4,15 +4,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 import ProfilePage from '../modules/settings/screens/Profile/Profile';
-import { profilPicture } from '../assets';
 import CoachNavigator from './CoachNavigator';
 import DiscoveryStack from './DiscoveryNavigator';
-import Header from '../modules/coaching/screens/CoachPage/CoachPage';
 import { TabStackNavigatorParamsList } from './types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux';
 
 const Tab = createBottomTabNavigator<TabStackNavigatorParamsList>();
 
 const TabsStack = () => {
+  const coach = useSelector((state: RootState) => state.coach);
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -40,14 +41,14 @@ const TabsStack = () => {
                 height: 45,
                 width: 45,
                 borderRadius: 30,
-                borderColor: focused ? 'transparent' : 'gainsboro',
-                borderWidth: focused ? 0 : 2,
+                borderColor: focused ? 'black' : 'gainsboro',
+                borderWidth: 2,
                 padding: 2,
-                marginTop: 10,
+                marginTop: 15,
               }}
             >
               <Image
-                source={profilPicture}
+                source={{ uri: coach.img }}
                 style={{
                   height: '100%',
                   width: '100%',
@@ -59,7 +60,7 @@ const TabsStack = () => {
             </View>
           ),
           tabBarLabel: '',
-          header: () => <Header />,
+          headerShown: false,
         }}
       />
       <Tab.Screen
