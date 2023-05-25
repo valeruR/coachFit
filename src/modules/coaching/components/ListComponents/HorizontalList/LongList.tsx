@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, Image, FlatList, StyleSheet } from 'react-native';
+import { View, Image, FlatList, StyleSheet, Pressable } from 'react-native';
 import { CardItemType } from '../types';
 
 const Card = ({ item }: { item: CardItemType }) => {
   return (
-    <View style={styles.cardContainer}>
+    <Pressable style={styles.cardContainer} onPress={item.onPress}>
       <Image
         source={{ uri: item.img }}
         resizeMode="cover"
         style={styles.cardImg}
       />
-    </View>
+    </Pressable>
   );
 };
 

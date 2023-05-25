@@ -1,10 +1,17 @@
 import React from 'react';
-import { View, Image, FlatList, StyleSheet, Text } from 'react-native';
+import {
+  View,
+  Image,
+  FlatList,
+  StyleSheet,
+  Text,
+  Pressable,
+} from 'react-native';
 import { CardItemType } from '../types';
 
 const Card = ({ item }: { item: CardItemType }) => {
   return (
-    <View style={styles.cardContainer}>
+    <Pressable style={styles.cardContainer} onPress={item.onPress}>
       <View style={styles.imgContainer}>
         <Image
           source={{ uri: item.img }}
@@ -16,7 +23,7 @@ const Card = ({ item }: { item: CardItemType }) => {
         <Text style={styles.cardTitle}>{item.title}</Text>
         <Text style={styles.cardCoach}>{item.coach}</Text>
       </View>
-    </View>
+    </Pressable>
   );
 };
 

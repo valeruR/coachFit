@@ -6,6 +6,7 @@ export type CardItemType = {
   title: string;
   coach: string;
   key?: string;
+  onPress: () => void;
 };
 
 export type CardType = 'card' | 'longCard';

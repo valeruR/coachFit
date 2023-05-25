@@ -10,9 +10,7 @@ export type CoachNavigatorParamsList = {
 
 export type DiscoveryNavigatorParamsList = {
   HomePage: undefined;
-  CoachPage: {
-    id: string;
-  };
+  CoachPage: undefined;
   ShowAll: {
     type: CardType;
     category: string;

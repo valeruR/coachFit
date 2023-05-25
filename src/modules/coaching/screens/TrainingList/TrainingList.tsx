@@ -99,11 +99,7 @@ export default function HomePage({ navigation }: HomePageProps) {
   const onPress = useCallback(
     (id: string) => {
       dispatch(getCoach(id))
-        .then(() =>
-          navigation.navigate('CoachPage', {
-            id,
-          }),
-        )
+        .then(() => navigation.navigate('CoachPage'))
         .catch(() => Alert.alert('An error occured'));
     },
     [navigation, dispatch],
@@ -187,6 +183,7 @@ export default function HomePage({ navigation }: HomePageProps) {
                   img: prog.media,
                   coach: `${prog?.coach?.firstname} ${prog?.coach?.lastname}`,
                   title: prog.name,
+                  onPress: () => onPress(prog.coachId),
                 }))}
               navigation={navigation}
             />
