@@ -12,6 +12,9 @@ import { RootState } from '../redux';
 
 const Tab = createBottomTabNavigator<TabStackNavigatorParamsList>();
 
+const coachThorImg =
+  'https://firebasestorage.googleapis.com:443/v0/b/coach-fit-f4a01.appspot.com/o/coaches%2FNvEb7z5XBz8xnkdlLfFS%2Fthor.jpeg?alt=media&token=177efdef-6109-4920-b863-4b33bddfd8b8';
+
 const TabsStack = () => {
   const coach = useSelector((state: RootState) => state.coach);
   return (
@@ -48,7 +51,7 @@ const TabsStack = () => {
               }}
             >
               <Image
-                source={{ uri: coach.img }}
+                source={{ uri: coach.img || coachThorImg }}
                 style={{
                   height: '100%',
                   width: '100%',
