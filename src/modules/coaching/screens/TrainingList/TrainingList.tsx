@@ -26,18 +26,32 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { DiscoveryNavigatorParamsList } from '../../../../navigation/types';
 import { CardType } from '../../components/ListComponents/types';
 import { getCoach } from '../../../../redux/coachReducer';
+import Icon from 'react-native-vector-icons/AntDesign';
+import FeatherIcon from 'react-native-vector-icons/Feather';
+import { getCoachTags } from '../../../../redux/tagsReducer';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 
-const HeaderButton = ({ title }: { title: string }) => {
+const HeaderButton = ({
+  title,
+  page,
+}: {
+  title: string;
+  page: 'SearchPage' | 'SupportPage';
+}) => {
+  const navigation =
+    useNavigation<NavigationProp<DiscoveryNavigatorParamsList>>();
   return (
     <TouchableOpacity
       style={styles.headerButton}
-      /* onPress={() => {
-        navigation.push(routes.Support, {
-          hasMargin: true,
-        });
-      }} */
+      onPress={() => {
+        navigation.navigate(page);
+      }}
     >
-      <Text style={styles.headerText}>{title}</Text>
+      {title === 'Search' ? (
+        <Icon name="search1" size={20} color="grey" />
+      ) : (
+        <FeatherIcon name="share" size={20} color="grey" />
+      )}
     </TouchableOpacity>
   );
 };
@@ -92,7 +106,9 @@ export default function HomePage({ navigation }: HomePageProps) {
   const dispatch = useAppDispatch();
 
   const renderHeaderButton = useCallback(
-    (title: string) => <HeaderButton title={title} />,
+    (title: string, page: 'SearchPage' | 'SupportPage') => (
+      <HeaderButton title={title} page={page} />
+    ),
     [],
   );
 
@@ -126,10 +142,14 @@ export default function HomePage({ navigation }: HomePageProps) {
     getData().catch(() => Alert.alert('No programs found'));
   }, []);
 
+  useEffect(() => {
+    dispatch(getCoachTags());
+  }, [dispatch]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: () => renderHeaderButton('Share'),
-      headerRight: () => renderHeaderButton('Search'),
+      headerLeft: () => renderHeaderButton('Share', 'SupportPage'),
+      headerRight: () => renderHeaderButton('Search', 'SearchPage'),
       headerTransparent: true,
     });
   }, [navigation, renderHeaderButton]);

@@ -5,6 +5,7 @@ import HomePage from '../modules/coaching/screens/TrainingList/TrainingList';
 import ShowAll from '../modules/coaching/screens/Show/ShowAll';
 import { DiscoveryNavigatorParamsList } from './types';
 import CoachNavigator from './CoachNavigator';
+import SearchPage from '../modules/coaching/screens/SearchPage';
 
 const Stack = createNativeStackNavigator<DiscoveryNavigatorParamsList>();
 
@@ -18,6 +19,11 @@ const DiscoveryStack = () => {
           title: 'Discovery',
           headerStyle: { backgroundColor: 'white' },
         }}
+      />
+      <Stack.Screen
+        name="SearchPage"
+        component={SearchPage}
+        options={{ headerShown: false }}
       />
       <Stack.Screen
         name="ShowAll"
