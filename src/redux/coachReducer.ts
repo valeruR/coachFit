@@ -4,12 +4,13 @@ import storage from '@react-native-firebase/storage';
 
 export interface CoachInitialState {
   id: string;
-  firstname?: string;
-  lastname?: string;
-  email?: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  tags: Array<string>;
   subscribers?: number;
-  description?: string;
-  img?: string;
+  description: string;
+  img: string;
 }
 
 const initialState: CoachInitialState = {
@@ -17,6 +18,7 @@ const initialState: CoachInitialState = {
   firstname: '',
   lastname: '',
   email: '',
+  tags: [],
   description: '',
   subscribers: 0,
   img: '',
@@ -32,6 +34,7 @@ export const getCoach = createAsyncThunk('coach/fetch', async (id: string) => {
     firstname: coachData?.firstname,
     lastname: coachData?.lastname,
     email: coachData?.email,
+    tags: coachData?.tags,
     description: coachData?.description,
     subscribers: coachData?.subscribers,
     img,
