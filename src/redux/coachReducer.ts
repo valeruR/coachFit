@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import { storage as localStorage } from '../utils/storage';
 
 export interface CoachInitialState {
   id: string;
@@ -30,7 +31,7 @@ export const getCoach = createAsyncThunk('coach/fetch', async (id: string) => {
   const img = await (
     await storage().ref(`coaches/${id}`).list()
   ).items[0].getDownloadURL();
-  return {
+  const newCoach = {
     firstname: coachData?.firstname,
     lastname: coachData?.lastname,
     email: coachData?.email,
@@ -39,6 +40,8 @@ export const getCoach = createAsyncThunk('coach/fetch', async (id: string) => {
     subscribers: coachData?.subscribers,
     img,
   };
+  localStorage.set('coach', JSON.stringify(newCoach));
+  return newCoach;
 });
 
 export const coachSlice = createSlice({
@@ -49,6 +52,9 @@ export const coachSlice = createSlice({
       ...state,
       id: action.payload,
     }),
+    getCoachFromStorage: (state, action: PayloadAction<CoachInitialState>) => ({
+      ...action.payload,
+    }),
   },
   extraReducers: (builder) => {
     builder.addCase(getCoach.fulfilled, (state, action) => ({
@@ -58,5 +64,5 @@ export const coachSlice = createSlice({
   },
 });
 
-export const { addId } = coachSlice.actions;
+export const { addId, getCoachFromStorage } = coachSlice.actions;
 export default coachSlice.reducer;

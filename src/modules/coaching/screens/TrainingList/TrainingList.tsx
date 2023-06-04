@@ -143,7 +143,7 @@ export default function HomePage({ navigation }: HomePageProps) {
   }, []);
 
   useEffect(() => {
-    dispatch(getCoachTags());
+    dispatch(getCoachTags()).catch(() => {});
   }, [dispatch]);
 
   useLayoutEffect(() => {
