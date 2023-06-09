@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Pressable,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -20,6 +21,7 @@ type HeaderProps = {
 
 const Header = ({ navigation }: HeaderProps) => {
   const coach = useSelector((state: RootState) => state.coach);
+
   return (
     <SafeAreaView style={styles.header}>
       <View style={styles.tab}>
@@ -33,7 +35,9 @@ const Header = ({ navigation }: HeaderProps) => {
         <Text style={styles.title}>
           {coach.firstname} {coach.lastname}
         </Text>
-        <Icon name="staro" color="gray" size={20} style={styles.rightIcon} />
+        <Pressable onPress={() => {}}>
+          <Icon name="staro" color="gray" size={20} style={styles.rightIcon} />
+        </Pressable>
       </View>
       <View style={styles.headerSection}>
         <TouchableOpacity style={styles.headerIconContainer}>
@@ -48,12 +52,15 @@ const Header = ({ navigation }: HeaderProps) => {
           resizeMode="cover"
           resizeMethod="scale"
         />
-        <TouchableOpacity style={styles.headerIconContainer}>
+        <Pressable
+          style={styles.headerIconContainer}
+          onPress={() => navigation.navigate('Support')}
+        >
           <View style={styles.headerIcon}>
             <Icon name="hearto" color={'rgb(235, 64, 52)'} size={20} />
           </View>
           <Text style={styles.headerText}>Support Me</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </SafeAreaView>
   );
